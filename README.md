@@ -110,8 +110,8 @@
 1. **Clonar el repositorio:**
 
    ```bash
-   git clone https://github.com/tu-usuario/nombre-del-repositorio.git
-   cd nombre-del-repositorio
+   git clone https://github.com/brayanalmengor04/my-finnantrack-app
+   cd my-finnantrack-app
    ```
 
 2. **Instalar dependencias:**
