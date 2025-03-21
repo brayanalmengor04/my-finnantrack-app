@@ -84,8 +84,13 @@
     $ node -v
     v22.12.0
     ```
-- **Backend:**  
-  - Spring Boot : Yo utilizo el JDK 23 (Maven) 
+- **Backend:**   
+ Spring Boot : Yo utilizo el JDK 23 (Maven) 
+ Para instalar y configurar el **Backend**, sigue las instrucciones en el siguiente repositorio:
+[![Backend Repository](https://img.shields.io/badge/Backend-Instalaci%C3%B3n-blue?style=for-the-badge)](https://github.com/brayanalmengor04/my-finantrack-backend)
+
+---
+¡Buena suerte y disfruta desarrollando con Finantrack! 🚀
 
 
 ## Estructura del Proyecto
