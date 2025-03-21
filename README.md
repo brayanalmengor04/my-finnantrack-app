@@ -199,6 +199,7 @@
 - **Revisión de Código:** Participa activamente en las revisiones de código, ofreciendo y recibiendo feedback constructivo.
 - **Actualización de Tareas:** Una vez finalizada tu tarea, actualiza el estado correspondiente en GitHub Projects para mantener un flujo de trabajo ágil.
 
+
 ## Licencia
 
 Este proyecto se distribuye bajo la [Licencia MIT](LICENSE).

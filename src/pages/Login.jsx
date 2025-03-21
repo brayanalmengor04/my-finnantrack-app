@@ -1,145 +1,257 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { SiGoogle, SiGithub } from 'react-icons/si';
+import { useAuth } from './../hooks/useAuth';
+import { useBackendTest } from './../hooks/useBackendTest'; 
+import { SiReact } from "react-icons/si";
 
-export default function Login() { 
-    const [isLogin, setIsLogin] = useState(false);
+export default function Login() {
+  const { login, register, loading, error } = useAuth();
+  const { loading: backendLoading, backendStatus, error: backendError } = useBackendTest();
+  const [isLogin, setIsLogin] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
-    const toggleView = (e) => {
-      e.preventDefault();
-      setIsLogin((prev) => !prev);
-    };
-    return (
-      <div className="flex h-screen">
-        <div className="hidden lg:flex items-center justify-center flex-1 bg-white text-black">
-          <div className="max-w-md text-center">imagen</div>
-        </div>
-        <div className="w-full bg-gray-100 lg:w-1/2 flex items-center justify-center">
-          <div className="max-w-md w-full p-6">
-            {isLogin ? (
-              <>
-                <h1 className="text-3xl font-semibold mb-6 text-black text-center">Login</h1>
-                <h2 className="text-sm font-semibold mb-6 text-gray-500 text-center">
+  // Toggle para cambiar entre login y register
+  const toggleView = e => {
+    e.preventDefault();
+    setIsLogin(prev => !prev);
+  };
+
+  // Maneja el login
+  const handleSubmitLogin = async e => {
+    e.preventDefault();
+    const email = e.target.loginEmail.value;
+    const password = e.target.loginPassword.value;
+    const token = await login(email, password);
+    if (token) {
+      setModalMessage('Login exitoso');
+      setShowModal(true);
+      e.target.reset();
+    }
+    console.log('Login token:', token);
+  };
+
+  // Maneja el registro
+  const handleSubmitRegister = async e => {
+    e.preventDefault();
+    const form = e.target;
+    const firstName = form.firstName.value;
+    const lastName = form.lastName.value;
+    const email = form.email.value;
+    const password = form.password.value;
+    const role = form.role.value;
+    const data = await register({ name: firstName, lastName, email, password, role });
+    if (data) {
+      setModalMessage('Registro y login exitoso');
+      setShowModal(true);
+      form.reset();
+    }
+    console.log('Register data:', data);
+  };
+
+  return (
+    <div className="flex min-h-screen">
+      {showModal && (
+       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+       <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full transform transition-all duration-300 ease-out animate-fade-in">
+         <div className="flex items-center space-x-3">
+           <SiReact className="text-blue-500 text-3xl" />
+           <h2 className="text-xl font-bold">Notification</h2>
+         </div>
+         <p className="mt-4 text-gray-700">{modalMessage}</p>
+         <button
+           onClick={() => setShowModal(false)}
+           className="mt-6 w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded transition duration-200"
+         >
+           Close
+         </button>
+       </div>
+     </div>
+      )}
+
+      <div className="hidden lg:flex lg:w-1/2 relative">
+        <img
+          src="/image/bg-loginv3.jpg"
+          alt="Imagen presentación de login"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      </div>
+
+      <div className="w-full lg:w-1/2 flex items-center justify-center bg-gray-100 p-6">
+        <div className="w-full max-w-md space-y-6">
+        
+          {!isLogin ? (
+            <>
+              <h1 className="text-4xl font-bold text-gray-900 text-center">Login</h1> 
+                {/* Indicador del estado del backend */}
+               
+              <p className="text-center text-sm text-gray-500">
                 Welcome back, please enter your credentials.
-                </h2> 
+              </p>
+              <form onSubmit={handleSubmitLogin} className="space-y-4">
+                <div>
+                  <label htmlFor="loginEmail" className="block text-sm font-medium text-gray-700">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="loginEmail"
+                    name="loginEmail"
+                    placeholder="you@gmail.com"
+                    className="mt-1 block w-full p-2 border rounded-md focus:ring focus:ring-gray-300 transition-colors" 
+                    required
+                  />
+                </div>
+                <div>
+                  <label htmlFor="loginPassword" className="block text-sm font-medium text-gray-700">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    id="loginPassword"
+                    name="loginPassword"
+                    placeholder="********"
+                    className="mt-1 block w-full p-2 border rounded-md focus:ring focus:ring-gray-300 transition-colors" 
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full py-2 px-4 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors"
+                  disabled={loading}
+                >
+                  {loading ? 'Processing...' : 'Log in'}
+                </button> 
+         
+                {(() => {
+                  if (backendLoading) {
+                    return (
+                      <p className="text-blue-500 flex items-center">
+                        <span className="mr-2">⏳</span>
+                        Cargando backend...
+                      </p>
+                    );
+                  }
+                  if (backendError) {
+                    return (
+                      <p className="text-red-500 flex items-center">
+                        <span className="mr-2">❌</span>
+                        Error backend: {backendError}
+                      </p>
+                    );
+                  }
+                  if (backendStatus) {
+                    return (
+                      <p className="text-green-500 flex items-center">
+                        <span className="mr-2">✅</span>
+                        Backend active
+                      </p>
+                    );
+                  }
+                  return null;
+                })()}
+                {error && <p className="text-red-500 text-sm">{error}</p>} 
+              </form>
 
-                {/** Logearse */}
-                <form className="space-y-4">
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                      Email
-                    </label>
-                    <input type="text" id="email" name="email"
-                      className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                      Password
-                    </label>
-                    <input type="password" id="password" name="password"
-                      className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
-                    />
-                  </div>
-                  <div>
-                    <button
-                      type="submit"
-                      className="w-full bg-black text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
-                    >
-                      Login
-                    </button>
-                  </div>
-                </form>
-                <div className="mt-4 text-sm text-gray-600 text-center">
-                  <p>
-                    Don't have an account?{' '}
-                    <a href="#" onClick={toggleView} className="text-black hover:underline">
-                    Register here
-                    </a>
-                  </p>
-                </div>
-              </>
-            ) : (
-              // Vista de registro
-              <>
-                <h1 className="text-3xl font-semibold mb-6 text-black text-center">Sign Up</h1>
-                <h2 className="text-sm font-semibold mb-6 text-gray-500 text-center">
+              <p className="text-center text-sm text-gray-600">
+                Don't have an account?{' '}
+                <a href="#" onClick={toggleView} className="text-black hover:underline">
+                  Register here
+                </a>
+              </p>
+            </>
+          ) : (
+            <>
+              <h1 className="text-4xl font-bold text-gray-900 text-center">Sign Up</h1>
+              <p className="text-center text-sm text-gray-500">
                 Support me as the creator of the app.
-                </h2>
-                <div className="mt-4 flex flex-col lg:flex-row items-center justify-between">
-                  <div className="w-full lg:w-1/2 mb-2 lg:mb-0">
-                    <button
-                      type="button"
-                      className="w-full flex justify-center items-center gap-2 bg-white text-sm text-gray-600 p-2 rounded-md hover:bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200 transition-colors duration-300"
-                    >
-                      Sign Up with Google
-                    </button>
-                  </div>
-                  <div className="w-full lg:w-1/2 ml-0 lg:ml-2">
-                    <button
-                      type="button"
-                      className="w-full flex justify-center items-center gap-2 bg-white text-sm text-gray-600 p-2 rounded-md hover:bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200 transition-colors duration-300"
-                    >
-                      Sign Up with Github
-                    </button>
-                  </div>
-                </div>
-                <div className="mt-4 text-sm text-gray-600 text-center">
-                  <p>o con email</p>
-                </div>
-                <form className="space-y-4">
+              </p>
+              <div className="flex gap-4">
+                <button
+                  type="button"
+                  className="cursor-pointer flex-1 border border-gray-300 rounded-lg p-2 flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors"
+                >
+                  <SiGoogle className="text-xl" />
+                  Sign Up with Google
+                </button>
+                <button
+                  type="button"
+                  className="cursor-pointer flex-1 border border-gray-300 rounded-lg p-2 flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors"
+                >
+                  <SiGithub className="text-xl" />
+                  Sign Up with Github
+                </button>
+              </div>
+              <p className="text-center text-sm text-gray-500">or sign up with email</p>
+              <form onSubmit={handleSubmitRegister} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                      Username
+                    <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
+                      First Name
                     </label>
                     <input
                       type="text"
-                      id="username"
-                      name="username"
-                      className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                      id="firstName"
+                      name="firstName"
+                      placeholder="First Name"
+                      className="mt-1 block w-full p-2 border rounded-md focus:ring focus:ring-gray-300 transition-colors"
                     />
                   </div>
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                      Email
+                    <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
+                      Last Name
                     </label>
                     <input
                       type="text"
-                      id="email"
-                      name="email"
-                      className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                      id="lastName"
+                      name="lastName"
+                      placeholder="Last Name"
+                      className="mt-1 block w-full p-2 border rounded-md focus:ring focus:ring-gray-300 transition-colors"
                     />
                   </div>
-                  <div>
-                    <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      id="password"
-                      name="password"
-                      className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
-                    />
-                  </div>
-                  <div>
-                    <button
-                      type="submit"
-                      className="w-full bg-black text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
-                    >
-                      Sign Up
-                    </button>
-                  </div>
-                </form>
-                <div className="mt-4 text-sm text-gray-600 text-center">
-                  <p>
-                     Already have an account?{' '}
-                    <a href="#" onClick={toggleView} className="text-black hover:underline">
-                      Login here
-                    </a>
-                  </p>
                 </div>
-              </>
-            )}
-          </div>
+                <div>
+                  <label htmlFor="signupEmail" className="block text-sm font-medium text-gray-700">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="signupEmail"
+                    name="email"
+                    placeholder="you@example.com"
+                    className="mt-1 block w-full p-2 border rounded-md focus:ring focus:ring-gray-300 transition-colors"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="signupPassword" className="block text-sm font-medium text-gray-700">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    id="signupPassword"
+                    name="password"
+                    placeholder="********"
+                    className="mt-1 block w-full p-2 border rounded-md focus:ring focus:ring-gray-300 transition-colors"
+                  />
+                </div>
+                <input type="hidden" name="role" value="ADMIN" />
+                <button
+                  type="submit"
+                  className="w-full py-2 px-4 bg-gradient-to-r from-black to-gray-800 text-white font-semibold rounded-lg hover:from-gray-800 hover:to-black transition-colors"
+                >
+                  Sign Up
+                </button>
+              </form>
+              <p className="text-center text-sm text-gray-600">
+                Already have an account?{' '}
+                <a href="#" onClick={toggleView} className="text-black hover:underline">
+                  Login here
+                </a>
+              </p>
+            </>
+          )}
         </div>
       </div>
-    );
+    </div>
+  );
 }
