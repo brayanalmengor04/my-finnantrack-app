@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import axios from 'axios'; 
 
 export const useAuth = () => {
   const [loading, setLoading] = useState(false);
@@ -7,13 +7,9 @@ export const useAuth = () => {
 
   const login = async (email, password) => {
     setLoading(true);
-    setError(null);
+    setError(null); // Limpiar error antes de hacer la solicitud
     try {
-      const { data } = await axios.post('http://localhost:8080/api/auth/login', {
-        email,
-        password
-      });
-      // Suponiendo que el endpoint retorna { token: '...' }
+      const { data } = await axios.post('http://localhost:8080/api/auth/login', { email, password });
       localStorage.setItem('jwtToken', data.token);
       setLoading(false);
       return data.token;
@@ -26,14 +22,10 @@ export const useAuth = () => {
 
   const register = async ({ name, lastName, email, password, role }) => {
     setLoading(true);
-    setError(null);
+    setError(null); // Limpiar error antes de hacer la solicitud
     try {
       const { data } = await axios.post('http://localhost:8080/api/auth/register', {
-        name,
-        lastName,
-        email,
-        password,
-        role, //"ADMIN", en el formulario viene de un input hidden
+        name, lastName, email, password, role
       });
       setLoading(false);
       return data;
@@ -44,5 +36,5 @@ export const useAuth = () => {
     }
   };
 
-  return { login, register, loading, error };
+  return { login, register, loading, error, setError }; // Exportamos setError para limpiar manualmente
 };
