@@ -1,53 +1,48 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { SiGoogle, SiGithub } from 'react-icons/si';
-import { useAuth } from './../hooks/useAuth';
+import { useAuth } from './../hooks/useAuth'; 
+import { AuthContext } from '../components/AuthContext';
 import { useBackendTest } from './../hooks/useBackendTest';
 import { SiReact } from "react-icons/si";
+import { useNavigate  } from 'react-router-dom';
 
 export default function Login() {
-  const { login, register,setError, loading, error } = useAuth();
+  const {register,setError, loading, error } = useAuth(); 
+  const { errorLogin, clearErrorLogin, loginUser, loadingLogin } = useContext(AuthContext);
   const { loading: backendLoading, backendStatus, error: backendError } = useBackendTest();
   const [isLogin, setIsLogin] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
+  const [modalMessage, setModalMessage] = useState(''); 
+  const navigate = useNavigate();
 
-  // Toggle para cambiar entre login y register
-  const toggleView = e => {
-    e.preventDefault();
-    setIsLogin(prev => !prev);
-  };
-  // Maneja el login
-  const handleSubmitLogin = async e => {
-    e.preventDefault();
-    const email = e.target.loginEmail.value;
-    const password = e.target.loginPassword.value;
-    const token = await login(email, password);
-    if (token) {
-      setModalMessage('Login exitoso');
-      setShowModal(true);
+  const toggleView = e => { e.preventDefault();setIsLogin(prev => !prev);};
+  const handleSubmitLogin = async e => {e.preventDefault();
+    clearErrorLogin(); 
+    const { email, password } = e.target;
+    const success = await loginUser(email.value, password.value);
+    if (success) {
+      navigate('/dashboard');
       e.target.reset();
+    } else {
+      navigate('/');
     }
-    console.log('Login token:', token);
   };
-
-  // Maneja el registro
+  // Registro
   const handleSubmitRegister = async e => {
     e.preventDefault();
-    const form = e.target;
-    const firstName = form.firstName.value;
-    const lastName = form.lastName.value;
-    const email = form.email.value;
-    const password = form.password.value;
-    const role = form.role.value;
-    const data = await register({ name: firstName, lastName, email, password, role });
-    if (data) {
-      setModalMessage('Registro y login exitoso');
+    const { firstName, lastName, email, password, role } = e.target;
+    const data = await register({ name: firstName.value,lastName: lastName.value,email: email.value,
+      password: password.value,
+      role: role.value,
+    });
+    if (data) {navigate('/');
+      setModalMessage("Datos Se agregaron Correctamente!");
       setShowModal(true);
-      form.reset();
+      e.target.reset(); 
+    } else { setModalMessage("Error durante el registro. Verifica tus datos y vuelve a intentarlo.");
+      setShowModal(true); 
     }
-    console.log('Register data:', data);
   };
-
   return ( 
   <div className="w-screen h-screen flex items-center justify-center bg-gray-50 bg-theme-magenta-blue">    
     <div className="w-[90vw] h-[90vh] bg-white rounded-lg shadow-2xl overflow-hidden flex">
@@ -68,23 +63,19 @@ export default function Login() {
           </div>
         </div>
       )}
-      <div className="hidden lg:flex lg:w-1/2 "> 
-        <img
-          src="../image/bg-loginv3.jpg"
-          alt="Imagen presentación de login"
-          className="relative inset-0 w-full h-full object-cover"
-        /> 
-      </div>
-      {/* Sección derecha con el formulario */}
+      <div className="hidden lg:flex lg:w-1/2">
+            <img
+              src="../image/testing_login.jpg"
+              alt="Imagen presentación de login"
+              className="relative inset-0 w-full h-full object-cover rounded-xl shadow-lg border-4 border-white"
+            />
+        </div>
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6 relative"> 
-    
             <div className='absolute top-0 right-0 p-5'>
-                {(() => {
-            // Estado "procesando"
+      {(() => {
             if (backendLoading) {
               return (
                 <p className="text-yellow-500 flex items-center mt-2 text-sm">
-                  {/* Pequeña animación de 'pulse' en el icono */}
                   <span className="mr-2 animate-pulse">🟡</span>
                   Processing...
                 </p>
@@ -93,7 +84,6 @@ export default function Login() {
             if (backendError) {
               return (
                 <p className="text-red-500 flex items-center mt-2 text-sm">
-                  {/* Pequeña animación de 'bounce' en el icono */}
                   <span className="mr-2 animate-bounce">🔴</span>
                   Out of service
                 </p>
@@ -113,7 +103,7 @@ export default function Login() {
         <div className="w-full max-w-md space-y-6">
           {!isLogin ? (
             <>
-              <h1 className="text-4xl font-bold text-gray-900 text-center">Finnantrack - Login </h1>
+              <h1 className="text-4xl font-bold text-gray-900 text-center">Finnantrack MB Credential Login</h1>
               <p className="text-center text-sm text-gray-500">
                 Welcome back, please enter your credentials.
               </p>
@@ -122,19 +112,19 @@ export default function Login() {
               <form onSubmit={handleSubmitLogin} className="space-y-8 mt-6">
                 {/* Email */}
                 <div className="relative">
-                  <input type="email" id="loginEmail"name="loginEmail" placeholder=" "
+                  <input type="email" id="email"name="email" placeholder=" "
                     className="
                       block w-full px-2.5 pb-2.5 pt-4 text-sm
                       text-gray-900 bg-transparent rounded-lg
-                      border border-gray-300 appearance-none
+                      border border-purple-300 appearance-none
                       focus:outline-none focus:ring-0
-                      focus:border-black peer
+                      focus:border-purple-300 peer
                     "
                     required
                   />
                   <label
-                    htmlFor="loginEmail"className="
-                      absolute text-sm text-gray-500 duration-300
+                    htmlFor="email"className="
+                      absolute text-sm text-purple-500 duration-300
                       transform -translate-y-4 scale-75 top-2 z-10 origin-[0]
                       bg-gray-50 px-2
                       peer-focus:px-2 peer-placeholder-shown:scale-100
@@ -148,19 +138,19 @@ export default function Login() {
                   </label>
                 </div>
                 <div className="relative">
-                  <input type="password" id="loginPassword" name="loginPassword" placeholder=" "
+                  <input type="password" id="password" name="password" placeholder=" "
                     className="
                       block w-full px-2.5 pb-2.5 pt-4 text-sm
                       text-gray-900 bg-transparent rounded-lg
-                      border border-gray-300 appearance-none
+                      border border-purple-300 appearance-none
                       focus:outline-none focus:ring-0
-                      focus:border-black peer
+                      focus:border-purple-300 peer
                     "
                     required
                   />
                   <label
-                    htmlFor="loginPassword" className="
-                      absolute text-sm text-gray-500 duration-300
+                    htmlFor="password" className="
+                      absolute text-sm text-purple-500 duration-300
                       transform -translate-y-4 scale-75 top-2 z-10 origin-[0]
                       bg-gray-50 px-2
                       peer-focus:px-2 peer-placeholder-shown:scale-100
@@ -174,23 +164,28 @@ export default function Login() {
                   </label>
                 </div>
                 <button type="submit" className="cursor-pointer w-full py-2 px-4 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors"
-                  disabled={loading}
+                  onSubmit={handleSubmitLogin}
+                  disabled={loadingLogin}
                 >
-                  {loading ? 'Processing...' : 'Log in'}
+                  {loadingLogin ? 'Processing...' : 'Log in'}
                 </button>
-
-                {/* Error de credenciales */}
-                {error && error !== '' && (
-                <div className="mt-4 p-3 border border-red-400 bg-red-100 text-red-700 rounded relative">
-                  <span>{typeof error === 'object' ? error.error || 'Error inesperado' : error}</span>
-                  <button
-                    className="absolute top-1 right-2 text-red-600 font-bold"
-                    onClick={() => setError(null)} // Limpiar error al hacer clic
-                  >
-                    ✖
-                  </button>
-                  </div>
-                )}
+                 {/* Error de credenciales */}
+                  {errorLogin && (
+                    <div className="mt-4 p-3 border border-red-400 bg-red-100 text-red-700 rounded relative">
+                      <span>
+                        {typeof errorLogin === 'object'
+                          ? errorLogin.error || 'Error inesperado'
+                          : errorLogin}
+                      </span>
+                      <button
+                        type="button"
+                        className="absolute top-1 right-2 text-red-600 font-bold"
+                        onClick={clearErrorLogin}
+                      >
+                        ✖
+                      </button>
+                    </div>
+                  )}
               </form>
 
               {/* Toggle para registro */}
@@ -216,15 +211,15 @@ export default function Login() {
                       className="
                         block w-full px-2.5 pb-2.5 pt-4 text-sm
                         text-gray-900 bg-transparent rounded-lg
-                        border border-gray-300 appearance-none
+                        border border-purple-300 appearance-none
                         focus:outline-none focus:ring-0
-                        focus:border-black peer
+                        focus:border-purple-300 peer
                       "
                       required
                     />
                     <label htmlFor="firstName"
                       className="
-                        absolute text-sm text-gray-500 duration-300
+                        absolute text-sm text-purple-500 duration-300
                         transform -translate-y-4 scale-75 top-2 z-10 origin-[0]
                         bg-gray-50 px-2
                         peer-focus:px-2 peer-placeholder-shown:scale-100
@@ -245,13 +240,13 @@ export default function Login() {
                         text-gray-900 bg-transparent rounded-lg
                         border border-gray-300 appearance-none
                         focus:outline-none focus:ring-0
-                        focus:border-black peer
+                        focus:border-purple-300 peer
                       "
                       required
                     />
                     <label htmlFor="lastName"
                       className="
-                        absolute text-sm text-gray-500 duration-300
+                        absolute text-sm text-purple-500 duration-300
                         transform -translate-y-4 scale-75 top-2 z-10 origin-[0]
                         bg-gray-50 px-2
                         peer-focus:px-2 peer-placeholder-shown:scale-100
@@ -272,15 +267,15 @@ export default function Login() {
                     className="
                       block w-full px-2.5 pb-2.5 pt-4 text-sm
                       text-gray-900 bg-transparent rounded-lg
-                      border border-gray-300 appearance-none
+                      border border-purple-300 appearance-none
                       focus:outline-none focus:ring-0
-                      focus:border-black peer
+                      focus:border-purple-300 peer
                     "
                     required
                   />
                   <label htmlFor="signupEmail"
                     className="
-                      absolute text-sm text-gray-500 duration-300
+                      absolute text-sm text-purple-500 duration-300
                       transform -translate-y-4 scale-75 top-2 z-10 origin-[0]
                       bg-gray-50 px-2
                       peer-focus:px-2 peer-placeholder-shown:scale-100
@@ -299,15 +294,15 @@ export default function Login() {
                     className="
                       block w-full px-2.5 pb-2.5 pt-4 text-sm
                       text-gray-900 bg-transparent rounded-lg
-                      border border-gray-300 appearance-none
+                      border border-purple-300 appearance-none
                       focus:outline-none focus:ring-0
-                      focus:border-black peer
+                      focus:border-purple-300 peer
                     "
                     required
                   />
                   <label htmlFor="signupPassword"
                     className="
-                      absolute text-sm text-gray-500 duration-300
+                      absolute text-sm text-purple-500 duration-300
                       transform -translate-y-4 scale-75 top-2 z-10 origin-[0]
                       bg-gray-50 px-2
                       peer-focus:px-2 peer-placeholder-shown:scale-100
@@ -320,30 +315,24 @@ export default function Login() {
                     Password
                   </label>
                 </div>
-
-                {/* Campo hidden para el rol */}
-                <input type="hidden" name="role" value="ADMIN" />
+                {/* Campo hidden para el rol cambiarlo para temas de Test (ADMIN,CLIENT) */}
+                <input type="hidden" name="role" value="CLIENT" />
                 <button type="submit" className="cursor-pointer w-full py-2 px-4 bg-gradient-to-r from-black to-gray-800 text-white font-semibold rounded-lg hover:from-gray-800 hover:to-black transition-colors"
                 >
                   Sign Up
                 </button>
               </form> 
-
-            {/* Mostrar error si existe cambiar icono  */} 
-              {error && error !== '' && (
+              {errorLogin && errorLogin !== '' && (
                 <div className="mt-4 p-3 border border-red-400 bg-red-100 text-red-700 rounded relative">
-                  <span>{typeof error === 'object' ? error.error || 'Error inesperado' : error}</span>
+                  <span>{typeof errorLogin === 'object' ? errorLogin.error || 'Error inesperado' : errorerrorLogin}</span>
                   <button
                     className="cursor-pointer absolute top-1 right-2 text-red-600 font-bold"
-                    onClick={() => setError(null)} // Limpiar error al hacer clic
+                    onClick={() => setError(null)} 
                   >
-                    ✖
+                    X
                   </button>
                   </div>
                 )}
-
-
-              {/* Toggle para login */}
               <p className="text-center text-sm text-gray-600">
                 Already have an account?{' '}
                 <a href="#" onClick={toggleView} className="text-black hover:underline">
