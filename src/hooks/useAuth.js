@@ -1,40 +1,29 @@
 import { useState } from 'react';
-import axios from 'axios'; 
+import axios from 'axios';
 
 export const useAuth = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const login = async (email, password) => {
+  const postRequest = async (url, data) => {
     setLoading(true);
-    setError(null); // Limpiar error antes de hacer la solicitud
+    setError(null);
     try {
-      const { data } = await axios.post('http://localhost:8080/api/auth/login', { email, password });
-      localStorage.setItem('jwtToken', data.token);
-      setLoading(false);
-      return data.token;
+      const { data: responseData } = await axios.post(url, data);
+      return responseData;
     } catch (err) {
       setError(err.response?.data || err.message);
-      setLoading(false);
       return null;
+    } finally {
+      setLoading(false);
     }
   };
+  // No inclui el login porque en otro componente manejo de logout , y tema de comportamiento del token 
+
 
   const register = async ({ name, lastName, email, password, role }) => {
-    setLoading(true);
-    setError(null); // Limpiar error antes de hacer la solicitud
-    try {
-      const { data } = await axios.post('http://localhost:8080/api/auth/register', {
-        name, lastName, email, password, role
-      });
-      setLoading(false);
-      return data;
-    } catch (err) {
-      setError(err.response?.data || err.message);
-      setLoading(false);
-      return null;
-    }
-  };
+    return await postRequest('http://localhost:8080/api/auth/register', { name, lastName, email, password, role });
+  }; 
 
-  return { login, register, loading, error, setError }; // Exportamos setError para limpiar manualmente
+  return {register, loading, error, setError};
 };

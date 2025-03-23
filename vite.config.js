@@ -6,5 +6,11 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [react(),
     tailwindcss(),
-  ],
+  ], 
+  optimizeDeps: {
+    include: ['jwt-decode']
+  },
+  resolve: {
+    dedupe: ['jwt-decode']
+  }
 })
