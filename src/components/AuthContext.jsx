@@ -7,7 +7,8 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(() => localStorage.getItem('jwtToken'));
-  const [user, setUser] = useState(() => (token ? jwtDecode(token) : null)); 
+  const [user, setUser] = useState(() => (token ? jwtDecode(token) : null));  
+  const [userDetails, setUserDetails] = useState(null); 
   const [errorLogin, setErrorLogin] = useState(null); 
   const [loadingLogin, setLoadingLogin] = useState(false);
 
@@ -52,14 +53,36 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
   const clearErrorLogin = () => setErrorLogin(null);
+
   useEffect(() => {
     if (token) {
       setUser(jwtDecode(token));
     }
-  }, [token]);
+  }, [token]); 
+
+  // Nuevo useEffect para obtener detalles adicionales del usuario usando su ID
+  useEffect(() => {
+    if (user && user.user_id) {
+      axios
+        .get(`http://localhost:8080/api/auth/user/${user.user_id}`, {
+          headers: {
+            // Suponiendo que el endpoint requiere autenticación
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(response => {
+          setUserDetails(response.data);
+        })
+        .catch(error => {
+          console.error("Error al obtener los detalles del usuario:", error);
+        });
+    }
+  }, [user, token]);
+
+
 
   return (
-    <AuthContext.Provider value={{ token, user, loginUser, logoutUser, errorLogin, loadingLogin, clearErrorLogin }}>
+    <AuthContext.Provider value={{ token, user, loginUser, logoutUser, errorLogin, loadingLogin, clearErrorLogin, userDetails}}>
       {children}
     </AuthContext.Provider>
   );
