@@ -1,12 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { SiGoogle, SiGithub } from 'react-icons/si';
-import { useAuth } from './../hooks/useAuth'; 
-import { AuthContext } from '../components/AuthContext';
-import { useBackendTest } from './../hooks/useBackendTest';
+import { useAuth } from '../../../hooks/useAuth'; 
+import { AuthContext } from '../../../components/AuthContext';
+import { useBackendTest } from '../../../hooks/useBackendTest';
 import { SiReact } from "react-icons/si";
 import { useNavigate  } from 'react-router-dom';
 
-export default function Login() {
+const Login: React.FC = () => {
   const {register,setError, loading, error } = useAuth(); 
   const { errorLogin, clearErrorLogin, loginUser, loadingLogin } = useContext(AuthContext);
   const { loading: backendLoading, backendStatus, error: backendError } = useBackendTest();
@@ -24,7 +24,7 @@ export default function Login() {
       navigate('/dashboard');
       e.target.reset();
     } else {
-      navigate('/');
+      navigate('/auth/login');
     }
   };
   // Registro
@@ -324,7 +324,7 @@ export default function Login() {
               </form> 
               {errorLogin && errorLogin !== '' && (
                 <div className="mt-4 p-3 border border-red-400 bg-red-100 text-red-700 rounded relative">
-                  <span>{typeof errorLogin === 'object' ? errorLogin.error || 'Error inesperado' : errorerrorLogin}</span>
+                  <span>{typeof errorLogin === 'object' ? errorLogin.error || 'Error inesperado' : errorLogin}</span>
                   <button
                     className="cursor-pointer absolute top-1 right-2 text-red-600 font-bold"
                     onClick={() => setError(null)} 
@@ -346,4 +346,5 @@ export default function Login() {
     </div> 
   </div>
   );
-}
+} 
+export default Login;
