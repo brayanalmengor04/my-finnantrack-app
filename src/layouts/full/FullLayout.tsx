@@ -10,9 +10,9 @@ const FullLayout: FC = () => {
     return (
         <>
       <div className="flex w-full min-h-screen dark:bg-darkgray">
-        <div className="page-wrapper flex w-full  ">
+        <div className="page-wrapper flex w-full  "> 
           {/* Header/sidebar */}
-              <Sidebar /> 
+              <Sidebar  /> 
           <div className="page-wrapper-sub flex flex-col w-full dark:bg-darkgray">
             {/* Top Header  */}
              <Header/>
@@ -25,7 +25,9 @@ const FullLayout: FC = () => {
                 className={`w-full`}
               >
                 <ScrollToTop>
-                  <div className="container py-30">
+                  {/* ClASE PERSONALIZADA EN CSS/LAYOUT/CONTAINER.CSS */} 
+                  
+                  <div className="container py-10">
                   {/* Esto se maneja con las rutas */}
                   <Outlet/>
                   </div>
