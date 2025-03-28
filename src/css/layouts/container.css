@@ -1,10 +1,10 @@
-.page-wrapper {
+.page-wrapper { 
     margin-left: 256px;
     transition: .2s ease-in;
     margin-right: 0px;
 
 }
-
+/* 
 .simplebar-scrollbar:before {
     background: var(--color-border) !important;
   }
@@ -24,7 +24,7 @@
       background-position: 0% 50%;
     }
   }
-
+*/
 @media screen and (max-width:1280px) {
     .page-wrapper{
         margin-left: 0px;
@@ -33,4 +33,4 @@
 
 [data-sidebar-type="mini-sidebar"] .page-wrapper-sub {
     margin-left: 15px;
-}
+} 

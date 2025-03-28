@@ -15,7 +15,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen p-4 bg-gray-50">
+    <div className="min-h-screen p-4 bg-white">
       {/* Encabezado */}
       <div className="mb-6 border-2 border-green-500 p-4 rounded-lg bg-white shadow-md flex justify-between items-center">
         <h1 className="text-2xl font-bold">

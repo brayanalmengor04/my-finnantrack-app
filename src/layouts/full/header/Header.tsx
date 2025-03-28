@@ -4,12 +4,12 @@ import MobileSidebar from "../sidebar/MobileSidebar";
 import { Link } from "react-router-dom";
 
 const Header = () => {
-  const [isSticky, setIsSticky] = useState(false);
+  const [atTop, setAtTop] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsSticky(window.scrollY > 50);
+      setAtTop(window.scrollY === 0);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -19,10 +19,10 @@ const Header = () => {
   return (
     <>
       <header
-        className={`sticky top-0 z-50 ${
-          isSticky
-            ? "bg-white dark:bg-gray-800 fixed w-full shadow-md"
-            : "bg-white"
+        className={`sticky top-0 z-50 transition-all duration-300 ${
+          atTop
+            ? "bg-white dark:bg-gray-800 bg-opacity-80 backdrop-blur-sm shadow-lg"
+            : "bg-transparent"
         }`}
       >
         <nav className="flex items-center justify-between py-4 px-4 sm:px-8">
@@ -37,7 +37,10 @@ const Header = () => {
           </div>
           {/* Logo o título del sitio */}
           <div className="flex items-center">
-            <Link to="/" className="text-lg font-bold text-gray-800 dark:text-white">
+            <Link
+              to="/"
+              className="text-lg font-bold text-gray-800 dark:text-white"
+            >
               Brand
             </Link>
           </div>
@@ -45,13 +48,13 @@ const Header = () => {
           <div className="hidden xl:flex items-center gap-4">
             <Link
               to="/about"
-              className="text-gray-700 dark:text-gray-300 hover:text-primary"
+              className="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors"
             >
               About
             </Link>
             <Link
               to="/contact"
-              className="text-gray-700 dark:text-gray-300 hover:text-primary"
+              className="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors"
             >
               Contact
             </Link>
@@ -77,8 +80,8 @@ const Header = () => {
                 <Icon icon="mingcute:close-line" height={24} />
               </button>
             </div>
-            {/* <MobileSidebar /> */} 
-            Design movil 
+            {/* Aquí puedes incluir tu componente MobileSidebar
+            <MobileSidebar /> */}
           </div>
         </div>
       )}
