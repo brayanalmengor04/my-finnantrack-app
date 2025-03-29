@@ -5,7 +5,6 @@ import Header from "./header/Header";
 import ScrollToTop from "../../components/shared/ScrollToTop";
 import { Outlet } from "react-router-dom";
 
-
 const FullLayout: FC = () => {
     return (
         <>
@@ -16,7 +15,6 @@ const FullLayout: FC = () => {
           <div className="page-wrapper-sub flex flex-col w-full dark:bg-darkgray">
             {/* Top Header  */}
              <Header/>
-  
             <div
               className={`bg-lightgray dark:bg-dark  h-full rounded-bb`}
             >

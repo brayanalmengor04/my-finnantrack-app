@@ -9,6 +9,10 @@ const Dashboard = Loadable(lazy(() => import('../views/dasboard/Dasboard')));
 const BlankLayout = Loadable(lazy(() => import('../layouts/blank/BlankLayout')));
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
 
+// GENERAL ADMINISTRATION MODULO 
+import CustomersSuppliers from '../views/customers/CustomersSuppliers';
+
+
 const Router = [
   {
     // Ruta raíz que redirige a /auth/login
@@ -38,7 +42,24 @@ const Router = [
         element: <Navigate to="/dashboard" replace />,
       },
     ],
+  }, 
+  {
+    // MÓDULO DE ADMINISTRACIÓN GENERAL
+    path: "/administration",
+    element: <FullLayout />,
+    children: [
+      {path: "customers-suppliers",element: <CustomersSuppliers />},
+      { path: "products-stock", 
+        // element: <ProductsStock />,
+        },
+      {
+        path: "income-expenses",
+        // element: <IncomeExpenses />,
+      },
+      { path: "*", element: <Navigate to="/dashboard" replace /> },
+    ],
   },
+
 ];
 
 const router = createBrowserRouter(Router, { basename: '/finnantrack' });
