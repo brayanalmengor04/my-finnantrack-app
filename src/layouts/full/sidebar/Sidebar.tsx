@@ -9,7 +9,7 @@ const SidebarLayout = () => {
       {/* Sección para el logo */}
       <div className="px-6 py-4 flex items-center">
         {/* Puedes reemplazar este span por el logo de tu producto */}
-        <span className="text-xl font-bold">Logo</span>
+        <span className="text-xl text-white font-bold">Logo</span>
       </div>
       {/* Contenedor de navegación con scroll vertical */}
       <div className="px-5 mt-2 overflow-y-auto h-[calc(100vh-100px)]">

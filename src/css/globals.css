@@ -1,17 +1,22 @@
-/* 
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap"); */
+
 @import "tailwindcss";
 @import './layouts/container.css';
 @import './layouts/sidebar.css';
-/* @import './theme/default-colors.css'; */
 @import './override/reboot.css';
-/*  
-esto ya no se usa
-@tailwind base;
-@tailwind components;
-@tailwind utilities; */ 
 
 
+
+@theme{
+  --color-primary :#181720;  
+  --color-primary-light:#22212a; 
+  --color-theme-magenta-blue:#583ebc;
+} 
+
+
+body{
+  font-family: 'Poppins', sans-serif; 
+  background-color: var(--color-primary);
+}
 
 @layer components {
   .container { 

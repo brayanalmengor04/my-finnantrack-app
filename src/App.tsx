@@ -3,7 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router, RouterProvider } from 'react-router-dom';
 import router from "./routes/Router"
 import { AuthProvider } from './components/AuthContext'; // si aplica
-import "./global.css";
+import "./css/globals.css";
 const App: React.FC = () => {
   return (
     <AuthProvider>
@@ -11,5 +11,4 @@ const App: React.FC = () => {
     </AuthProvider>
   );
 };
-
 export default App;

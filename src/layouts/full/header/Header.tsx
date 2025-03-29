@@ -41,22 +41,7 @@ const Header = () => {
               to="/"
               className="text-lg font-bold text-gray-800 dark:text-white"
             >
-              Brand
-            </Link>
-          </div>
-          {/* Opciones de navegación para escritorio */}
-          <div className="hidden xl:flex items-center gap-4">
-            <Link
-              to="/about"
-              className="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors"
-            >
-              About
-            </Link>
-            <Link
-              to="/contact"
-              className="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors"
-            >
-              Contact
+              Finnantrack-APP
             </Link>
           </div>
         </nav>
