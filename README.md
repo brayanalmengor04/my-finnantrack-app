@@ -21,6 +21,29 @@
 ## ¿ De que trata el proyecto ? 
 **FINNANTRACK** es una app para pequeños negocios, enfocada en la administración general y la facturación electrónica. El software será una solución integral para la gestión de clientes, ventas, inventario, reportes financieros y facturación electrónica según las regulaciones fiscales del país objetivo. 
 
+Aquí te dejo un ejemplo de **README.md** profesional y bien estructurado que integra tu enlace de Figma:
+
+---
+
+# Figma Track - APP
+
+## Visión General
+
+Bienvenido al repositorio de **Figma Track - APP**. Este proyecto está diseñado para ofrecer una experiencia de usuario intuitiva y moderna, combinando estética y funcionalidad en cada pantalla. El objetivo es crear una interfaz limpia, organizada y profesional que facilite tanto la navegación como el desarrollo.
+
+Aquí tienes una versión actualizada del README que integra de manera impactante el banner de Finnan Track:
+
+---
+
+## 🖼️ Diseño en Figma (Diseñando...)
+El diseño completo de la aplicación ha sido creado en Figma. Puedes explorarlo en detalle a través del siguiente enlace:  
+
+![Finnan Track Banner](github/docs/slidebanner/finnantrackbanner.png) 
+
+[Ver diseño en Figma](https://www.figma.com/design/PEFyoQa1qpZQTp9e2I3zsd/Figma-Track---APP?node-id=0-1&t=pgsnYmnuuh761UD8-1)
+> **Nota:** Si no tienes una cuenta en Figma, regístrate para acceder a todas las funcionalidades y detalles del diseño.
+
+
 ---
 ## Tecnologías Utilizadas
 - **Electron:** Framework para construir aplicaciones de escritorio multiplataforma.
