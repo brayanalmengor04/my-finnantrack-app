@@ -117,19 +117,62 @@ El diseño completo de la aplicación ha sido creado en Figma. Puedes explorarlo
 
 
 ## Estructura del Proyecto
-
 ```
-
 └── 📁src
     └── 📁assets
         └── react.svg
     └── 📁components
+        └── AuthContext.jsx
+        └── 📁shared
+            └── ScrollToTop.tsx
+    └── 📁css
+        └── globals.css
+        └── 📁layouts
+            └── container.css
+            └── header.css
+            └── sidebar.css
+        └── 📁override
+            └── reboot.css
+        └── 📁theme
+            └── default-colors.css
     └── 📁hooks
+        └── useAuth.js
+        └── useBackendTest.js
+    └── 📁layouts
+        └── 📁blank
+            └── BlankLayout.tsx
+        └── 📁full
+            └── FullLayout.tsx
+            └── 📁header
+                └── Header.tsx
+            └── 📁shared
+                └── 📁loadable
+                    └── Loadable.tsx
+            └── 📁sidebar
+                └── MobileSidebar.tsx
+                └── 📁Navitems
+                    └── NavItems.tsx
+                └── Sidebar.tsx
+                └── Sidebaritems.ts
     └── 📁pages
-        └── Login.jsx
+    └── 📁routes
+        └── Router.tsx
     └── 📁utils
-    └── App.jsx
-    └── global.css
+    └── 📁views
+        └── 📁auth
+            └── 📁error
+            └── 📁login
+                └── Login.tsx
+        └── 📁customers
+            └── CustomersSuppliers.tsx
+        └── 📁dasboard
+            └── Dasboard.tsx
+        └── 📁spinner
+            └── spinner.css
+            └── Spinner.tsx
+        └── 📁tables
+            └── CustommerTable.tsx
+    └── App.tsx
     └── main.jsx
 ```
 
