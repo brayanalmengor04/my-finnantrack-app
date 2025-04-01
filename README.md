@@ -21,8 +21,6 @@
 ## ¿ De que trata el proyecto ? 
 **FINNANTRACK** es una app para pequeños negocios, enfocada en la administración general y la facturación electrónica. El software será una solución integral para la gestión de clientes, ventas, inventario, reportes financieros y facturación electrónica según las regulaciones fiscales del país objetivo. 
 
-Aquí te dejo un ejemplo de **README.md** profesional y bien estructurado que integra tu enlace de Figma:
-
 ---
 
 # Figma Track - APP
